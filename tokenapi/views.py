@@ -24,6 +24,9 @@ def token_new(request):
                 return JSONResponse(data)
             else:
                 return JSONError("Unable to log you in, please try again")
+        else:
+            return JSONError("Invalid username or password")
+    return JSONError("Method is only allowed to POST")
 
 # Checks if a given token and user pair is valid
 # token/:token/:user.json
