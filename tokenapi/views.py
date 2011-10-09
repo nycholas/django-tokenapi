@@ -17,7 +17,6 @@ def token_new(request):
                 password=request.POST['password'])
             if user:
                 data = {
-                    'success': True,
                     'token': token_generator.make_token(user),
                     'user': user.pk,
                 }
@@ -26,7 +25,8 @@ def token_new(request):
                 return JSONError("Unable to log you in, please try again")
         else:
             return JSONError("Invalid username or password")
-    return JSONError("Method is only allowed to POST")
+    else:
+        return JSONError("Must access via a POST request.")
 
 # Checks if a given token and user pair is valid
 # token/:token/:user.json
@@ -40,7 +40,6 @@ def token(request, token, user):
         return JSONError("User does not exist.")
     if token_generator.check_token(user, 
         token): 
-        data['success'] = True
+        return JSONResponse({})
     else:
         return JSONError("Token did not match user.")
-    return JSONResponse(data)
